@@ -80,32 +80,38 @@ Sisteme giriş için varsayılan hesaplar:
 ## 📸 Ekran Görüntüleri
 
 ### 🛡️ Yönetici (Admin) Perspektifi
-Admin kullanıcıları tüm analitik verilere, personel yönetimine ve sistem günlüklerine tam erişime sahiptir.
+Yöneticiler sistemin tüm kontrolüne ve analitik verilere sahiptir.
 
-**Dashboard & Analitik**
+**1. Dashboard & Analitik Paneli**
 ![Admin Dashboard](screenshots/admin/dashboard.png)
 
-**Personel Yönetimi**
-![User Management](screenshots/admin/users.png)
+**2. Personel Yönetimi**
+![Admin Users](screenshots/admin/users.png)
 
-**Sistem Günlüğü (Audit Trail)**
-![Audit Logs](screenshots/admin/audit.png)
+**3. Ziyaretçi Takip Listesi**
+![Admin Visitors](screenshots/admin/visitors.png)
+
+**4. Sistem Günlükleri (Audit Trail)**
+![Admin Audit](screenshots/admin/audit.png)
 
 ---
 
 ### 🛎️ Resepsiyon Perspektifi
-Resepsiyon personeli için optimize edilmiş, hızlı ziyaretçi kaydı ve takibi odaklı arayüz.
+Resepsiyon personeli için optimize edilmiş, operasyonel odaklı ekranlar.
 
-**Ziyaretçi Listesi**
+**1. Dashboard (Hızlı Durum)**
+![Reception Dashboard](screenshots/reception/dashboard.png)
+
+**2. Ziyaretçi Kayıt & Filtreleme**
 ![Reception Visitors](screenshots/reception/visitors.png)
 
-**Yeni Ziyaretçi Kaydı**
-![Create Visitor](screenshots/reception/create_visitor.png)
+**3. Detaylı Yeni Kayıt Formu**
+![Reception Create](screenshots/reception/create_visitor.png)
 
 ---
 
-### 🔐 Güvenli Giriş
-![Login Page](screenshots/login.png)
+### 🔐 Güvenli Giriş Ekranı
+![Login](screenshots/login.png)
 
 ## 📄 Lisans
 Bu proje MIT lisansı altında lisanslanmıştır.
