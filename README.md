@@ -85,13 +85,16 @@ Yöneticiler sistemin tüm kontrolüne ve analitik verilere sahiptir.
 **1. Dashboard & Analitik Paneli**
 ![Admin Dashboard](screenshots/admin/dashboard.png)
 
-**2. Personel Yönetimi**
-![Admin Users](screenshots/admin/users.png)
-
-**3. Ziyaretçi Takip Listesi**
+**2. Ziyaretçi Takip Listesi**
 ![Admin Visitors](screenshots/admin/visitors.png)
 
-**4. Sistem Günlükleri (Audit Trail)**
+**3. Detaylı Yeni Kayıt Formu**
+![Admin Create](screenshots/admin/create_visitor.png)
+
+**4. Personel Yönetimi**
+![Admin Users](screenshots/admin/users.png)
+
+**5. Sistem Günlükleri (Audit Trail)**
 ![Admin Audit](screenshots/admin/audit.png)
 
 ---
