@@ -79,10 +79,17 @@ Sisteme giriş için varsayılan hesaplar:
 
 ## 📸 Ekran Görüntüleri
 
-*(Buraya projenizin ekran görüntülerini ekleyebilirsiniz)*
-1. **Dashboard:** Canlı istatistikler ve grafikler.
-2. **Ziyaretçi Listesi:** Detaylı filtreleme ve işlem butonları.
-3. **Yeni Kayıt:** Fotoğraf ve KVKK onaylı kayıt formu.
+### 📊 Yönetici Paneli (Dashboard)
+Analitik veriler, canlı doluluk oranı ve süre aşımı alarmları tek bir ekranda.
+![Dashboard](screenshots/dashboard.png)
+
+### 👥 Ziyaretçi Yönetimi
+Gelişmiş filtreleme, arama ve toplu işlem yetenekleri.
+![Ziyaretçi Listesi](screenshots/visitors.png)
+
+### 🔐 Güvenli Giriş
+Brute-force korumalı ve rol bazlı erişim kontrolü.
+![Giriş Sayfası](screenshots/login.png)
 
 ## 📄 Lisans
 Bu proje MIT lisansı altında lisanslanmıştır.
