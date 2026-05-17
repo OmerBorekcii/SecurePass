@@ -1,0 +1,51 @@
+@model IEnumerable<SecurePass.Core.Entities.User>
+@{
+    ViewData["Title"] = "Personel Yönetimi";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-user-gear me-2 text-primary"></i>Sistem Personelleri</h5>
+        <a asp-action="Create" class="btn btn-primary fw-bold px-4">Yeni Personel Ekle</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">KULLANICI ADI</th>
+                    <th>ROL</th>
+                    <th>DURUM</th>
+                    <th class="text-end pe-4">İŞLEMLER</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light text-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 38px; height: 38px;">
+                                    <i class="fa-solid fa-user-shield"></i>
+                                </div>
+                                <span class="fw-bold">@user.Username</span>
+                            </div>
+                        </td>
+                        <td><span class="badge @(user.Role == "Admin" ? "bg-danger" : "bg-info text-white") px-3">@user.Role</span></td>
+                        <td>
+                            @if(user.IsActive) { <span class="text-success small fw-bold"><i class="fa-solid fa-circle me-1" style="font-size:0.5rem"></i> Aktif</span> }
+                            else { <span class="text-muted small fw-bold">Pasif</span> }
+                        </td>
+                        <td class="text-end pe-4">
+                            @if(user.Id != 1) {
+                                <form asp-action="Delete" method="post" onsubmit="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?');">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

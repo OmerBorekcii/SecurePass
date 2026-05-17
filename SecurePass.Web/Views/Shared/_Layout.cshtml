@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SecurePass</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body data-theme="light">
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <div id="sidebar">
+            <div class="sidebar-header p-4">
+                <h4 class="mb-0 text-white d-flex align-items-center"><i class="fa-solid fa-shield-halved me-3 text-primary"></i><span>SecurePass</span></h4>
+                <small class="text-muted">Kurumsal Güvenlik v3.2</small>
+            </div>
+            <nav class="mt-2 flex-grow-1">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Dashboard" asp-action="Index">
+                    <i class="fa-solid fa-chart-pie"></i> <span>Yönetici Paneli</span>
+                </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visitor" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" asp-controller="Visitor" asp-action="Index">
+                    <i class="fa-solid fa-users-viewfinder"></i> <span>Ziyaretçiler</span>
+                </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Visitor" && ViewContext.RouteData.Values["action"]?.ToString() == "Create" ? "active" : "")" asp-controller="Visitor" asp-action="Create">
+                    <i class="fa-solid fa-user-plus"></i> <span>Yeni Kayıt</span>
+                </a>
+                
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="text-muted small px-4 mt-4 mb-2">YÖNETİM</div>
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active" : "")" asp-controller="Users" asp-action="Index">
+                        <i class="fa-solid fa-user-gear"></i> <span>Personeller</span>
+                    </a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Audit" ? "active" : "")" asp-controller="Audit" asp-action="Index">
+                        <i class="fa-solid fa-fingerprint"></i> <span>Denetim İzleri</span>
+                    </a>
+                }
+                
+                <div class="mt-auto border-top border-secondary border-opacity-10 p-3 text-center">
+                    <a class="nav-link text-danger m-0" asp-controller="Auth" asp-action="Logout">
+                        <i class="fa-solid fa-power-off"></i> <span>Çıkış Yap</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <main id="main-content">
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 3000">
+                <div id="liveToast" class="toast align-items-center text-white bg-primary border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body fw-bold" style="font-size: 1rem;">
+                            <i class="fa-solid fa-bell me-2"></i> <span id="toastMessage"></span>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            </div>
+
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <button id="sidebarToggle" class="btn btn-white shadow-sm border rounded-3 px-3 py-2">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                    </button>
+                    <h3 class="fw-bold mb-0">@ViewData["Title"]</h3>
+                </div>
+                <div class="user-profile d-flex align-items-center border px-3 py-2 rounded-4 shadow-sm bg-white">
+                    <i class="fa-solid fa-circle-user text-primary me-2 fs-4"></i>
+                    <div class="d-flex flex-column">
+                        <span class="fw-bold small lh-1">@(User.Identity?.Name ?? "Bilinmiyor")</span>
+                        <small class="text-muted" style="font-size: 0.65rem;">@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</small>
+                    </div>
+                </div>
+            </header>
+            @RenderBody()
+        </main>
+    }
+    else
+    {
+        <div class="container">@RenderBody()</div>
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        // Sidebar Control
+        const toggleBtn = document.getElementById('sidebarToggle');
+        if (toggleBtn) {
+            toggleBtn.onclick = () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                document.getElementById('main-content').classList.toggle('expanded');
+                localStorage.setItem('sidebar-collapsed', document.getElementById('sidebar').classList.contains('collapsed'));
+            };
+            if(localStorage.getItem('sidebar-collapsed') === 'true') {
+                document.getElementById('sidebar').classList.add('collapsed');
+                document.getElementById('main-content').classList.add('expanded');
+            }
+        }
+
+        // SignalR Initialization
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ReceiveNotification", function (message) {
+            const toastEl = document.getElementById('liveToast');
+            const msgEl = document.getElementById('toastMessage');
+            if (toastEl && msgEl) {
+                msgEl.innerText = message;
+                const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+                toast.show();
+            }
+        });
+
+        connection.start().catch(err => console.error("SignalR Connection Error: ", err.toString()));
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

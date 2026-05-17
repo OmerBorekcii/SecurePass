@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SecurePass.Business/SecurePass.Business.csproj" />
+  <Project Path="SecurePass.Core/SecurePass.Core.csproj" />
+  <Project Path="SecurePass.DataAccess/SecurePass.DataAccess.csproj" />
+  <Project Path="SecurePass.Web/SecurePass.Web.csproj" />
+</Solution>

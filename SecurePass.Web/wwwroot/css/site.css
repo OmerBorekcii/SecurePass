@@ -1,0 +1,172 @@
+:root {
+    --primary-color: #2563eb;
+    --sidebar-bg: #0f172a;
+    --sidebar-width: 280px;
+    --sidebar-collapsed-width: 80px;
+    --bg-light: #f1f5f9;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    left: 0; top: 0;
+    background: var(--sidebar-bg);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+
+#sidebar.collapsed .sidebar-header span,
+#sidebar.collapsed .sidebar-header small,
+#sidebar.collapsed .nav-link span,
+#sidebar.collapsed .text-muted.px-4 {
+    display: none !important;
+}
+
+#sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    color: #94a3b8;
+    text-decoration: none;
+    gap: 12px;
+    transition: all 0.2s;
+    border-radius: 8px;
+    margin: 4px 12px;
+}
+
+#sidebar .nav-link i { font-size: 1.25rem; width: 24px; text-align: center; }
+
+#sidebar .nav-link:hover, #sidebar .nav-link.active {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+#sidebar .nav-link.active { background: var(--primary-color); }
+
+#sidebar.collapsed .nav-link { justify-content: center; margin: 4px 8px; padding: 0.75rem 0; }
+
+#sidebar nav {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+}
+
+/* Main Content Adjustments */
+#main-content {
+    margin-left: var(--sidebar-width);
+    padding: 2rem;
+    min-height: 100vh;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#main-content.expanded { margin-left: var(--sidebar-collapsed-width); }
+
+/* Premium Card & Table */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.table thead th {
+    background-color: #f8fafc;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.animate-flicker { animation: flicker 1.5s infinite; }
+@keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.user-profile { background: #fff; border: 1px solid var(--border-color); }
+
+/* Buttons */
+.btn-primary { background-color: var(--primary-color); border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600; }
+.btn-light { background: #fff; color: var(--text-main); border: 1px solid var(--border-color); }
+
+/* Form Controls */
+.form-control, .form-select {
+    background-color: #ffffff !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-main) !important;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+}
+.form-control:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: var(--primary-color) !important; }
+
+/* Login Page Enhancements */
+.login-body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.login-card {
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+.login-header-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.login-card .form-control {
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 0.8rem 1rem;
+}
+
+.login-card .btn-primary {
+    padding: 0.8rem;
+    font-size: 1rem;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+/* Filter Section Styling */
+.filter-bar {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}

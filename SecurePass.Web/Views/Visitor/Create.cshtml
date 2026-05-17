@@ -1,0 +1,156 @@
+@model SecurePass.Core.Entities.Visitor
+@{
+    ViewData["Title"] = "Detaylı Ziyaretçi Kaydı";
+}
+
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small mb-4"></div>
+                    
+                    <!-- Bölüm 1: Kimlik Bilgileri -->
+                    <div class="mb-5">
+                        <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-id-card me-2"></i>Kimlik ve Kurum Bilgileri
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label asp-for="FirstName" class="form-label small fw-bold text-muted">AD</label>
+                                <input asp-for="FirstName" class="form-control" placeholder="Ahmet" />
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="LastName" class="form-label small fw-bold text-muted">SOYAD</label>
+                                <input asp-for="LastName" class="form-control" placeholder="Yılmaz" />
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="IdentityNumber" class="form-label small fw-bold text-muted">TC KİMLİK NO</label>
+                                <input asp-for="IdentityNumber" class="form-control" maxlength="11" placeholder="11122233344" />
+                                <span asp-validation-for="IdentityNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Company" class="form-label small fw-bold text-muted">FİRMA / KURUM</label>
+                                <input asp-for="Company" class="form-control" placeholder="Ziyaretçi Firması" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="VehiclePlate" class="form-label small fw-bold text-muted">ARAÇ PLAKASI (VARSA)</label>
+                                <input asp-for="VehiclePlate" class="form-control" placeholder="34 ABC 123" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bölüm 2: İletişim ve Ziyaret Detayı -->
+                    <div class="mb-5">
+                        <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-handshake me-2"></i>Ziyaret Detayları
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="PhoneNumber" class="form-label small fw-bold text-muted">TELEFON</label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="05xx xxx xx xx" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label small fw-bold text-muted">E-POSTA</label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="ornek@mail.com" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="HostPerson" class="form-label small fw-bold text-muted">ZİYARET EDİLEN KİŞİ</label>
+                                <input asp-for="HostPerson" class="form-control" placeholder="Ad Soyad" />
+                                <span asp-validation-for="HostPerson" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Department" class="form-label small fw-bold text-muted">DEPARTMAN</label>
+                                <select asp-for="Department" class="form-select">
+                                    <option value="">Seçiniz...</option>
+                                    <option value="Yönetim">Yönetim</option>
+                                    <option value="Bilgi İşlem">Bilgi İşlem</option>
+                                    <option value="İnsan Kaynakları">İnsan Kaynakları</option>
+                                    <option value="Satın Alma">Satın Alma</option>
+                                    <option value="Muhasebe">Muhasebe</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="VisitPurpose" class="form-label small fw-bold text-muted">ZİYARET NEDENİ</label>
+                                <textarea asp-for="VisitPurpose" class="form-control" rows="2" placeholder="Toplantı, Teknik Destek, Mülakat vb."></textarea>
+                                <span asp-validation-for="VisitPurpose" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bölüm 3: Güvenlik ve Onay -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-danger mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-shield-halved me-2"></i>Güvenlik ve Onay
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="ExpectedDurationHours" class="form-label small fw-bold text-muted">TAHMİNİ SÜRE</label>
+                                <select asp-for="ExpectedDurationHours" class="form-select border-warning">
+                                    <option value="1">1 Saat</option>
+                                    <option value="2">2 Saat</option>
+                                    <option value="4" selected>4 Saat</option>
+                                    <option value="8">8 Saat</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <div class="d-flex gap-3 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" asp-for="IsVip" id="isVip">
+                                        <label class="form-check-label text-warning fw-bold small" for="isVip">VIP</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" asp-for="IsBlacklisted" id="isBlack">
+                                        <label class="form-check-label text-danger fw-bold small" for="isBlack">KARA LİSTE</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 mt-4">
+                                <div class="p-4 border border-primary border-dashed rounded-3 bg-light text-center">
+                                    <label class="form-label d-block text-primary small fw-bold mb-3">ZİYARETÇİ FOTOĞRAFI (ZORUNLU)</label>
+                                    <i class="fa-solid fa-camera-retro fs-1 text-primary opacity-50 mb-2 d-block"></i>
+                                    <input type="file" name="photoFile" class="form-control mx-auto shadow-sm border-primary" style="max-width: 350px;" accept="image/*" required />
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="form-check bg-light p-3 border rounded-3">
+                                    <input class="form-check-input ms-0 me-2" type="checkbox" asp-for="AgreementAccepted" required id="kvkkCheck">
+                                    <label class="form-check-label small fw-bold" for="kvkkCheck">
+                                        KVKK aydınlatma metnini okudum, binaya giriş kurallarına uymayı taahhüt ederim.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2 mt-5 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary px-5 py-2 fw-bold rounded-pill">
+                            <i class="fa-solid fa-check-double me-2"></i>Kaydı Tamamla ve Giriş Yap
+                        </button>
+                        <a asp-action="Index" class="btn btn-light px-4 py-2 fw-bold border rounded-pill">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3">
+        <div class="card bg-primary text-white border-0 shadow-sm mb-4">
+            <div class="card-body p-4 text-center">
+                <i class="fa-solid fa-circle-info fs-1 mb-3 opacity-50"></i>
+                <h6 class="fw-bold mb-2">Operasyonel Not</h6>
+                <p class="small opacity-75 mb-0">Tüm yıldızlı ve zorunlu alanların doğruluğundan emin olun. Plaka kaydı otopark bariyer sistemiyle entegre edilmektedir.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

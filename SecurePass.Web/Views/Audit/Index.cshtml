@@ -1,0 +1,78 @@
+@model IEnumerable<SecurePass.Core.Entities.AuditLog>
+@{
+    ViewData["Title"] = "Sistem İzleme Merkezi (Audit Trail)";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0 text-dark">
+            <i class="fa-solid fa-list-ul me-2 text-primary"></i>Tüm Sistem Hareketleri
+        </h5>
+        <span class="badge bg-light text-muted border px-3 py-2 rounded-pill">
+            <i class="fa-solid fa-clock-rotate-left me-1"></i> Toplam Kayıt: @Model.Count()
+        </span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small fw-bold">
+                <tr>
+                    <th class="ps-4">ZAMAN DAMGASI</th>
+                    <th>OPERATÖR</th>
+                    <th>EYLEM KATEGORİSİ</th>
+                    <th>İŞLEM DETAYLARI</th>
+                    <th>IP ADRESİ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="small fw-bold text-dark">@log.Timestamp.ToString("dd MMM yyyy")</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">@log.Timestamp.ToString("HH:mm:ss")</div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary-subtle text-primary rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                                <span class="fw-semibold small">@log.Username</span>
+                            </div>
+                        </td>
+                        <td>
+                            @{
+                                var badgeClass = log.Action switch
+                                {
+                                    "Güvenlik İhlali" => "bg-danger",
+                                    "Veri İmhası" => "bg-danger",
+                                    "Kullanıcı Yönetimi" => "bg-warning text-dark",
+                                    "Sistem Erişimi" => "bg-success",
+                                    "Ziyaretçi Kaydı" => "bg-info text-white",
+                                    _ => "bg-secondary"
+                                };
+                            }
+                            <span class="badge @badgeClass px-3 py-1 rounded-pill" style="font-size: 0.65rem;">
+                                @log.Action.ToUpper()
+                            </span>
+                        </td>
+                        <td>
+                            <div class="text-dark small fw-medium">@log.Details</div>
+                        </td>
+                        <td>
+                            <code class="bg-light text-primary px-2 py-1 rounded small border">@log.IpAddress</code>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <i class="fa-solid fa-magnifying-glass fs-2 text-muted mb-3 d-block"></i>
+                            <p class="text-muted">Henüz kayıtlı bir sistem hareketi bulunmuyor.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,195 @@
+@model IEnumerable<SecurePass.Core.Entities.Visitor>
+@{
+    ViewData["Title"] = "Ziyaretçi Yönetimi";
+}
+
+<style>
+    .detail-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px; }
+    .detail-value { font-size: 0.8rem; font-weight: 600; color: var(--text-main); }
+    .table-hover tbody tr:hover { background-color: rgba(37, 99, 235, 0.02); }
+</style>
+
+<!-- Advanced Filter Bar -->
+<div class="filter-bar shadow-sm mb-4">
+    <form method="get">
+        <div class="row g-3 align-items-end">
+            <div class="col-lg-5">
+                <label class="form-label small fw-bold text-muted text-uppercase">Hızlı Arama</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" name="keyword" value="@ViewBag.Keyword" placeholder="Ad, Soyad, TC, Firma, Plaka veya Kişi..." class="form-control border-start-0" />
+                </div>
+            </div>
+            <div class="col-lg-7 d-flex gap-2">
+                <button type="submit" class="btn btn-primary fw-bold px-4 flex-grow-1">
+                    <i class="fa-solid fa-filter me-2"></i> Listeyi Filtrele
+                </button>
+                @if (!string.IsNullOrEmpty(ViewBag.Keyword))
+                {
+                    <a asp-action="Index" class="btn btn-light border fw-bold px-4 text-nowrap">
+                        <i class="fa-solid fa-rotate-left me-2"></i> Temizle
+                    </a>
+                }
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card border-0 shadow-sm overflow-hidden">
+    <form id="bulkForm" asp-action="BulkCheckOut" method="post">
+        <div class="card-header bg-white py-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <h6 class="fw-bold mb-0 text-dark me-3"><i class="fa-solid fa-list me-2 text-primary"></i>Kayıt Listesi</h6>
+                    <button type="button" onclick="document.getElementById('bulkForm').submit()" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3" id="bulkBtn" disabled>
+                        <i class="fa-solid fa-list-check me-1"></i> Toplu Çıkış
+                    </button>
+                </div>
+                <a asp-action="Create" class="btn btn-success btn-sm fw-bold rounded-pill px-3">
+                    <i class="fa-solid fa-plus me-1"></i> Yeni Ziyaretçi Kaydı
+                </a>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4" style="width: 40px;">
+                            <input type="checkbox" class="form-check-input" id="selectAll">
+                        </th>
+                        <th>ZİYARETÇİ & KİMLİK</th>
+                        <th>İLETİŞİM & ARAÇ</th>
+                        <th>ZİYARET DETAYI</th>
+                        <th>NOTLAR / KVKK</th>
+                        <th>GİRİŞ / ÇIKIŞ</th>
+                        <th>DURUM</th>
+                        <th class="text-end pe-4">İŞLEMLER</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td class="ps-4">
+                                @if(item.IsInside) {
+                                    <input type="checkbox" name="visitorIds" value="@item.Id" class="form-check-input visitor-check">
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    @if (item.Photo != null && item.Photo.Length > 0) {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Photo)" width="52" height="52" class="rounded-circle object-fit-cover shadow-sm me-3 border border-2 border-white" style="aspect-ratio: 1/1;" />
+                                    } else {
+                                        <div class="rounded-circle bg-primary-subtle d-flex justify-content-center align-items-center text-primary border border-primary-subtle me-3" style="width: 52px; height: 52px;">
+                                            <i class="fa-solid fa-user"></i>
+                                        </div>
+                                    }
+                                    <div>
+                                        <div class="fw-bold text-dark mb-0">
+                                            @item.FirstName @item.LastName
+                                            @if(item.IsVip) { <span class="badge bg-warning text-dark ms-1" style="font-size: 0.6rem;"><i class="fa-solid fa-crown"></i> VIP</span> }
+                                            @if(item.IsBlacklisted) { <span class="badge bg-danger ms-1" style="font-size: 0.6rem;"><i class="fa-solid fa-ban"></i> KARA LİSTE</span> }
+                                        </div>
+                                        <div class="detail-label mt-1">TC: @item.IdentityNumber</div>
+                                        <div class="detail-label">ID: #@item.Id.ToString("D4")</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="mb-1">
+                                    <div class="detail-label">TEL / PLAKA</div>
+                                    <div class="detail-value text-primary small">@item.PhoneNumber</div>
+                                    <div class="detail-value text-dark small">@(item.VehiclePlate ?? "-")</div>
+                                    <div class="text-muted small" style="font-size: 0.65rem;">@item.Email</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="mb-1">
+                                    <div class="detail-label">GİDİLEN KİŞİ / BİRİM</div>
+                                    <div class="detail-value small">@item.HostPerson</div>
+                                    <div class="badge bg-light text-muted border-0 p-0 fw-bold small">@item.Department</div>
+                                </div>
+                                <div class="detail-label">NEDEN</div>
+                                <div class="small text-muted text-truncate" style="max-width: 150px;" title="@item.VisitPurpose">@item.VisitPurpose</div>
+                            </td>
+                            <td>
+                                <div class="detail-label">KVKK / NOT</div>
+                                @if(item.AgreementAccepted) { <span class="text-success small fw-bold"><i class="fa-solid fa-file-contract"></i> ONAYLI</span> }
+                                <div class="small text-muted fst-italic">@(item.Note ?? "-")</div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <div class="text-success small fw-bold"><i class="fa-solid fa-circle-arrow-right me-1 opacity-50"></i> @item.VisitDate.ToString("HH:mm")</div>
+                                    @if(item.ExitDate != null) {
+                                        <div class="text-danger small fw-bold"><i class="fa-solid fa-circle-arrow-left me-1 opacity-50"></i> @item.ExitDate?.ToString("HH:mm")</div>
+                                    } else {
+                                        <div class="text-muted small opacity-25">--:--</div>
+                                    }
+                                    <div class="detail-label mt-1">SÜRE: @item.ExpectedDurationHours SAAT</div>
+                                </div>
+                            </td>
+                            <td>
+                                @if(item.IsInside) {
+                                    <span class="badge bg-success-subtle text-success border-0 px-2 rounded-pill">
+                                        <i class="fa-solid fa-circle me-1" style="font-size: 0.4rem;"></i> Aktif
+                                    </span>
+                                } else {
+                                    <span class="badge bg-secondary-subtle text-secondary border-0 px-2 rounded-pill">
+                                        <i class="fa-solid fa-check-double me-1"></i> Ayrıldı
+                                    </span>
+                                }
+                                @if(item.IsInside && item.VisitDate.AddHours(item.ExpectedDurationHours) < DateTime.Now) {
+                                    <div class="badge bg-danger animate-flicker mt-1 d-block" style="font-size: 0.6rem;">
+                                        <i class="fa-solid fa-clock"></i> SÜRE AŞIMI
+                                    </div>
+                                }
+                            </td>
+                            <td class="text-end pe-4" style="min-width: 220px;">
+                                <div class="d-flex justify-content-end align-items-center gap-2">
+                                    @if (item.IsInside)
+                                    {
+                                        <button type="submit" asp-action="CheckOut" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning fw-bold px-3 rounded-pill text-nowrap" style="font-size: 0.75rem;">
+                                            <i class="fa-solid fa-door-open me-1"></i> Çıkış
+                                        </button>
+                                    }
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <button type="submit" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger fw-bold px-3 rounded-pill text-nowrap" style="font-size: 0.75rem;" onclick="return confirm('Bu kayıt kalıcı olarak silinecektir. Onaylıyor musunuz?');">
+                                            <i class="fa-solid fa-trash-can me-1"></i> Veriyi Sil
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const selectAll = document.getElementById('selectAll');
+        const checks = document.querySelectorAll('.visitor-check');
+        const bulkBtn = document.getElementById('bulkBtn');
+
+        if (selectAll) {
+            selectAll.addEventListener('change', (e) => {
+                checks.forEach(c => c.checked = e.target.checked);
+                toggleBulkBtn();
+            });
+        }
+
+        checks.forEach(c => c.addEventListener('change', toggleBulkBtn));
+
+        function toggleBulkBtn() {
+            const checkedCount = document.querySelectorAll('.visitor-check:checked').length;
+            if (bulkBtn) {
+                bulkBtn.disabled = checkedCount === 0;
+                bulkBtn.innerHTML = `<i class="fa-solid fa-list-check me-1"></i> Toplu Çıkış (${checkedCount})`;
+            }
+        }
+    </script>
+}
