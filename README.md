@@ -117,4 +117,4 @@ Resepsiyon personeli için optimize edilmiş, operasyonel odaklı ekranlar.
 Bu proje MIT lisansı altında lisanslanmıştır.
 
 ---
-Developed with ❤️ by [İsminiz]
+Developed with ❤️ by [Ömer Börekci]
