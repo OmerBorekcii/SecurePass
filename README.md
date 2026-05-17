@@ -79,17 +79,33 @@ Sisteme giriş için varsayılan hesaplar:
 
 ## 📸 Ekran Görüntüleri
 
-### 📊 Yönetici Paneli (Dashboard)
-Analitik veriler, canlı doluluk oranı ve süre aşımı alarmları tek bir ekranda.
-![Dashboard](screenshots/dashboard.png)
+### 🛡️ Yönetici (Admin) Perspektifi
+Admin kullanıcıları tüm analitik verilere, personel yönetimine ve sistem günlüklerine tam erişime sahiptir.
 
-### 👥 Ziyaretçi Yönetimi
-Gelişmiş filtreleme, arama ve toplu işlem yetenekleri.
-![Ziyaretçi Listesi](screenshots/visitors.png)
+**Dashboard & Analitik**
+![Admin Dashboard](screenshots/admin/dashboard.png)
+
+**Personel Yönetimi**
+![User Management](screenshots/admin/users.png)
+
+**Sistem Günlüğü (Audit Trail)**
+![Audit Logs](screenshots/admin/audit.png)
+
+---
+
+### 🛎️ Resepsiyon Perspektifi
+Resepsiyon personeli için optimize edilmiş, hızlı ziyaretçi kaydı ve takibi odaklı arayüz.
+
+**Ziyaretçi Listesi**
+![Reception Visitors](screenshots/reception/visitors.png)
+
+**Yeni Ziyaretçi Kaydı**
+![Create Visitor](screenshots/reception/create_visitor.png)
+
+---
 
 ### 🔐 Güvenli Giriş
-Brute-force korumalı ve rol bazlı erişim kontrolü.
-![Giriş Sayfası](screenshots/login.png)
+![Login Page](screenshots/login.png)
 
 ## 📄 Lisans
 Bu proje MIT lisansı altında lisanslanmıştır.
